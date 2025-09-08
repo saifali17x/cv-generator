@@ -9,12 +9,17 @@ import SkillsForm from "./components/SkillsForm";
 import SkillsPreview from "./components/SkillsPreview";
 import WorkExperienceForm from "./components/WorkExperienceForm";
 import WorkExperiencePreview from "./components/WorkExperiencePreview";
+import AwardsForm from "./components/AwardsForm";
+import AwardsPreview from "./components/AwardsPreview";
 import ActionButtons from "./components/ActionButtons";
 
 export default function App() {
   const [header, setHeader] = useState({
     name: "",
     email: "",
+    mobile: "",
+    url1: "",
+    url2: "",
   });
 
   const [projects, setProjects] = useState([]);
@@ -24,6 +29,8 @@ export default function App() {
   const [skills, setSkills] = useState([]);
 
   const [workExperience, setWorkExperience] = useState([]);
+
+  const [awards, setAwards] = useState([]);
 
   const updateHeader = (field, value) => {
     setHeader((prev) => ({ ...prev, [field]: value }));
@@ -42,6 +49,8 @@ export default function App() {
       id: Date.now().toString(),
       name: "",
       location: "",
+      startDate: "",
+      endDate: "",
       description: "",
       url: "",
     };
@@ -122,6 +131,29 @@ export default function App() {
     );
   };
 
+  const updateAwards = (id, field, value) => {
+    setAwards((prev) =>
+      prev.map((award) =>
+        award.id === id ? { ...award, [field]: value } : award
+      )
+    );
+  };
+
+  const addAward = () => {
+    const newAward = {
+      id: Date.now().toString(),
+      name: "",
+      issuer: "",
+      date: "",
+      description: "",
+    };
+    setAwards((prev) => [...prev, newAward]);
+  };
+
+  const deleteAward = (id) => {
+    setAwards((prev) => prev.filter((award) => award.id !== id));
+  };
+
   // Function to get all CV data
   const getCVData = () => ({
     header,
@@ -129,24 +161,29 @@ export default function App() {
     education,
     skills,
     workExperience,
+    awards,
   });
 
   // Function to load data from localStorage
   const handleLoadData = (data) => {
-    setHeader(data.header || { name: "", email: "" });
+    setHeader(
+      data.header || { name: "", email: "", mobile: "", url1: "", url2: "" }
+    );
     setProjects(data.projects || []);
     setEducation(data.education || []);
     setSkills(data.skills || []);
     setWorkExperience(data.workExperience || []);
+    setAwards(data.awards || []);
   };
 
   // Function to clear all data
   const handleClearData = () => {
-    setHeader({ name: "", email: "" });
+    setHeader({ name: "", email: "", mobile: "", url1: "", url2: "" });
     setProjects([]);
     setEducation([]);
     setSkills([]);
     setWorkExperience([]);
+    setAwards([]);
   };
 
   return (
@@ -171,6 +208,12 @@ export default function App() {
           onAdd={addWorkExperience}
           onDelete={deleteWorkExperience}
         />
+        <AwardsForm
+          awards={awards}
+          onUpdate={updateAwards}
+          onAdd={addAward}
+          onDelete={deleteAward}
+        />
         <SkillsForm
           skills={skills}
           onUpdate={updateSkills}
@@ -187,6 +230,7 @@ export default function App() {
       <div className="preview-section">
         <HeaderPreview header={header} />
         <WorkExperiencePreview workExperience={workExperience} />
+        <AwardsPreview awards={awards} />
         <ProjectsPreview projects={projects} />
         <EducationPreview education={education} />
         <SkillsPreview skills={skills} />

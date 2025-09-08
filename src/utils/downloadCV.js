@@ -68,6 +68,48 @@ export const downloadCVAsHTML = (cvData) => {
   }
 };
 
+// Helper function to generate clean link text from URLs
+const getLinkText = (url) => {
+  if (!url) return "";
+
+  try {
+    const urlObj = new URL(url);
+    const hostname = urlObj.hostname;
+
+    // Remove www. prefix if present
+    const cleanHostname = hostname.replace(/^www\./, "");
+
+    // Generate friendly text based on common platforms
+    if (cleanHostname.includes("linkedin.com")) return "LinkedIn";
+    if (cleanHostname.includes("github.com")) return "GitHub";
+    if (
+      cleanHostname.includes("portfolio") ||
+      cleanHostname.includes("personal")
+    )
+      return "Portfolio";
+    if (cleanHostname.includes("behance.net")) return "Behance";
+    if (cleanHostname.includes("dribbble.com")) return "Dribbble";
+    if (cleanHostname.includes("medium.com")) return "Medium";
+    if (
+      cleanHostname.includes("twitter.com") ||
+      cleanHostname.includes("x.com")
+    )
+      return "Twitter";
+
+    // For other domains, use the domain name
+    return cleanHostname;
+  } catch (error) {
+    // If URL parsing fails, return a generic text
+    return "Website";
+  }
+};
+
+// Helper function to generate project link text
+const getProjectLinkText = (url) => {
+  if (!url) return "";
+  return "Link to the Project";
+};
+
 // ATS-friendly description formatting
 const formatDescriptionForATS = (description) => {
   if (!description) return "";
@@ -89,7 +131,8 @@ const formatDescriptionForATS = (description) => {
 };
 
 const generateCVHTML = (cvData) => {
-  const { header, workExperience, projects, education, skills } = cvData;
+  const { header, workExperience, projects, education, skills, awards } =
+    cvData;
 
   return `
 <!DOCTYPE html>
@@ -151,6 +194,25 @@ const generateCVHTML = (cvData) => {
             color: #000;
         }
         
+        .contact-links {
+            margin-top: 5pt;
+        }
+        
+        .contact-link {
+            font-size: 10pt;
+            color: #000;
+            margin-bottom: 2pt;
+        }
+        
+        .contact-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        
+        .contact-link a:hover {
+            text-decoration: underline;
+        }
+        
         /* Section Headers - ATS Standard */
         .section {
             margin-bottom: 15pt;
@@ -167,32 +229,32 @@ const generateCVHTML = (cvData) => {
         }
         
         /* Work Experience - ATS Format */
-        .work-item, .project-item, .education-item {
+        .work-item, .project-item, .education-item, .award-item {
             margin-bottom: 12pt;
             page-break-inside: avoid;
         }
         
-        .work-header, .project-header, .education-header {
+        .work-header, .project-header, .education-header, .award-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
             margin-bottom: 3pt;
         }
         
-        .work-title, .project-name, .education-degree {
+        .work-title, .project-name, .education-degree, .award-name {
             font-size: 11pt;
             font-weight: bold;
             color: #000;
         }
         
-        .work-company, .project-location, .education-college {
+        .work-company, .project-location, .education-college, .award-issuer {
             font-size: 10pt;
             font-weight: bold;
             color: #000;
             font-style: italic;
         }
         
-        .work-dates, .project-dates, .education-dates {
+        .work-dates, .project-dates, .education-dates, .award-date {
             font-size: 10pt;
             color: #000;
             font-weight: normal;
@@ -204,7 +266,7 @@ const generateCVHTML = (cvData) => {
             margin-left: 10pt;
         }
         
-        .work-description, .project-description {
+        .work-description, .project-description, .award-description {
             font-size: 10pt;
             color: #000;
             line-height: 1.3;
@@ -212,12 +274,12 @@ const generateCVHTML = (cvData) => {
             text-align: justify;
         }
         
-        .work-description ul, .project-description ul {
+        .work-description ul, .project-description ul, .award-description ul {
             margin-left: 15pt;
             margin-top: 3pt;
         }
         
-        .work-description li, .project-description li {
+        .work-description li, .project-description li, .award-description li {
             margin-bottom: 2pt;
         }
         
@@ -245,9 +307,13 @@ const generateCVHTML = (cvData) => {
         
         /* Links - ATS Compatible */
         .project-url {
-            color: #000;
-            text-decoration: underline;
+            color: #0066cc;
+            text-decoration: none;
             font-size: 10pt;
+        }
+        
+        .project-url:hover {
+            text-decoration: underline;
         }
         
         /* Print Optimizations */
@@ -285,7 +351,7 @@ const generateCVHTML = (cvData) => {
                 margin-bottom: 12pt;
             }
             
-            .work-item, .project-item, .education-item {
+            .work-item, .project-item, .education-item, .award-item {
                 page-break-inside: avoid;
             }
             
@@ -335,7 +401,34 @@ const generateCVHTML = (cvData) => {
         <h1 class="name">${header.name || "YOUR NAME"}</h1>
         <div class="contact-info">
             ${header.email || "your.email@example.com"}
+            ${header.mobile ? ` | ${header.mobile}` : ""}
         </div>
+        ${
+          header.url1 || header.url2
+            ? `
+        <div class="contact-links">
+            ${
+              header.url1
+                ? `<div class="contact-link"><a href="${
+                    header.url1
+                  }" target="_blank" rel="noopener noreferrer">${getLinkText(
+                    header.url1
+                  )}</a></div>`
+                : ""
+            }
+            ${
+              header.url2
+                ? `<div class="contact-link"><a href="${
+                    header.url2
+                  }" target="_blank" rel="noopener noreferrer">${getLinkText(
+                    header.url2
+                  )}</a></div>`
+                : ""
+            }
+        </div>
+        `
+            : ""
+        }
     </div>
 
     ${
@@ -382,6 +475,42 @@ const generateCVHTML = (cvData) => {
     }
 
     ${
+      awards.length > 0
+        ? `
+    <div class="section">
+        <h2 class="section-title">Awards & Certificates</h2>
+        ${awards
+          .map(
+            (award) => `
+            <div class="award-item">
+                <div class="award-header">
+                    <div>
+                        <div class="award-name">${
+                          award.name || "Award Name"
+                        }</div>
+                        <div class="award-issuer">${
+                          award.issuer || "Issuing Organization"
+                        }</div>
+                    </div>
+                    <div class="award-date">${award.date || ""}</div>
+                </div>
+                ${
+                  award.description
+                    ? `<div class="award-description">${formatDescriptionForATS(
+                        award.description
+                      )}</div>`
+                    : ""
+                }
+            </div>
+        `
+          )
+          .join("")}
+    </div>
+    `
+        : ""
+    }
+
+    ${
       projects.length > 0
         ? `
     <div class="section">
@@ -395,13 +524,16 @@ const generateCVHTML = (cvData) => {
                         <div class="project-name">${
                           project.name || "Project Name"
                         }</div>
-                        ${
-                          project.location
-                            ? `<div class="project-location">${project.location}</div>`
-                            : ""
-                        }
                     </div>
+                    <div class="project-dates">${project.startDate || ""} ${
+              project.startDate && project.endDate ? " - " : ""
+            } ${project.endDate || ""}</div>
                 </div>
+                ${
+                  project.location
+                    ? `<div class="project-location">${project.location}</div>`
+                    : ""
+                }
                 ${
                   project.description
                     ? `<div class="project-description">${formatDescriptionForATS(
@@ -411,7 +543,11 @@ const generateCVHTML = (cvData) => {
                 }
                 ${
                   project.url
-                    ? `<div class="project-url">Project URL: ${project.url}</div>`
+                    ? `<div class="project-url"><a href="${
+                        project.url
+                      }" target="_blank" rel="noopener noreferrer">${getProjectLinkText(
+                        project.url
+                      )}</a></div>`
                     : ""
                 }
             </div>

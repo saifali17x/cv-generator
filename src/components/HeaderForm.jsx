@@ -18,6 +18,30 @@ export default function HeaderForm({ header, onChange }) {
           onChange={(e) => onChange("email", e.target.value)}
         />
       </div>
+      <div className="input-group">
+        <input
+          type="tel"
+          placeholder="Mobile Number"
+          value={header.mobile}
+          onChange={(e) => onChange("mobile", e.target.value)}
+        />
+      </div>
+      <div className="input-group">
+        <input
+          type="url"
+          placeholder="Website URL (e.g., LinkedIn, Portfolio)"
+          value={header.url1}
+          onChange={(e) => onChange("url1", e.target.value)}
+        />
+      </div>
+      <div className="input-group">
+        <input
+          type="url"
+          placeholder="Additional URL (e.g., GitHub, Personal Website)"
+          value={header.url2}
+          onChange={(e) => onChange("url2", e.target.value)}
+        />
+      </div>
     </div>
   );
 }

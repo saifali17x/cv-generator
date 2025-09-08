@@ -15,9 +15,10 @@ A modern, responsive CV/Resume generator built with React and Vite. Create profe
 
 ### 📝 **Comprehensive Sections**
 
-- **Personal Information** - Name, email, and contact details
-- **Work Experience** - Job titles, companies, dates, and descriptions
-- **Projects** - Project names, descriptions, and URLs
+- **Personal Information** - Name, email, mobile number, and up to 2 professional URLs (LinkedIn, GitHub, Portfolio, etc.)
+- **Work Experience** - Job titles, companies, dates, locations, and detailed descriptions
+- **Awards & Certificates** - Awards, certificates, issuing organizations, dates, and descriptions
+- **Projects** - Project names, dates, locations, descriptions, and clickable URLs
 - **Education** - Degrees, institutions, and graduation dates
 - **Skills** - Technical skills displayed as modern tags
 
@@ -33,6 +34,8 @@ A modern, responsive CV/Resume generator built with React and Vite. Create profe
 - **HTML Export** - Clean HTML files for online portfolios
 - **ATS Optimization** - Passes Applicant Tracking Systems
 - **Print-Ready** - Optimized for both screen and print
+- **Smart Links** - Automatic link text generation (LinkedIn Profile, GitHub Profile, etc.)
+- **Clean Print Output** - No browser headers/footers in printed CVs
 
 ## 🚀 Quick Start
 
@@ -118,9 +121,10 @@ cv-generator/
 
 ### 1. **Fill in Your Information**
 
-- Start with your personal details (name, email)
-- Add your work experience with job titles, companies, and descriptions
-- Include your projects with descriptions and URLs
+- Start with your personal details (name, email, mobile number, and professional URLs)
+- Add your work experience with job titles, companies, dates, locations, and descriptions
+- Include your awards and certificates with names, issuing organizations, dates, and descriptions
+- Add your projects with names, dates, locations, descriptions, and URLs
 - List your education and degrees
 - Add your technical skills
 
@@ -137,8 +141,43 @@ cv-generator/
 
 ### 4. **Download Your CV**
 
-- **PDF**: Click "Download PDF" and use your browser's print dialog
+- **PDF**: Click "Download PDF" and use your browser's print dialog (set margins to 'Minimum' and disable headers/footers for best results)
 - **HTML**: Click "Download HTML" to get a file for online use
+- **Smart Links**: URLs automatically become clickable links with professional text (e.g., "LinkedIn Profile" instead of full URLs)
+
+## 🆕 Recent Improvements
+
+### **Enhanced Contact Information**
+
+- Added mobile number field to personal information
+- Support for up to 2 professional URLs (LinkedIn, GitHub, Portfolio, etc.)
+- Smart link text generation for professional appearance
+
+### **New Awards & Certificates Section**
+
+- Complete awards and certificates management
+- Fields for award name, issuing organization, date, and description
+- Positioned strategically after work experience section
+- Professional formatting and ATS-friendly structure
+
+### **Improved Project Management**
+
+- Added start and end dates for projects
+- Reorganized project layout with dates on the right
+- Project locations now display in parentheses after dates
+- Enhanced project descriptions with better placeholders
+
+### **Better Link Handling**
+
+- All URLs now display as clickable blue links
+- Automatic link text generation based on platform (LinkedIn Profile, GitHub Profile, etc.)
+- Professional appearance in both PDF and HTML outputs
+
+### **Print Optimization**
+
+- Removed browser headers and footers from printed CVs
+- Clean, professional print output
+- Better instructions for optimal print settings
 
 ## 🎨 Design Features
 

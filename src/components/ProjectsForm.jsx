@@ -13,23 +13,37 @@ export default function ProjectsForm({ projects, onUpdate, onAdd, onDelete }) {
             />
             <input
               type="text"
+              placeholder="Start Date (e.g., Jan 2023)"
+              value={project.startDate}
+              onChange={(e) =>
+                onUpdate(project.id, "startDate", e.target.value)
+              }
+            />
+            <input
+              type="text"
+              placeholder="End Date (e.g., Dec 2023 or Present)"
+              value={project.endDate}
+              onChange={(e) => onUpdate(project.id, "endDate", e.target.value)}
+            />
+            <input
+              type="text"
               placeholder="Location"
               value={project.location}
               onChange={(e) => onUpdate(project.id, "location", e.target.value)}
             />
             <input
-              type="text"
-              placeholder="Description"
+              type="url"
+              placeholder="Project URL"
+              value={project.url}
+              onChange={(e) => onUpdate(project.id, "url", e.target.value)}
+            />
+            <textarea
+              placeholder="Project Description and Key Features"
               value={project.description}
               onChange={(e) =>
                 onUpdate(project.id, "description", e.target.value)
               }
-            />
-            <input
-              type="text"
-              placeholder="URL"
-              value={project.url}
-              onChange={(e) => onUpdate(project.id, "url", e.target.value)}
+              rows="3"
             />
           </div>
           <div className="project-actions">
