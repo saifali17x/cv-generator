@@ -17,6 +17,9 @@ export const downloadCVAsPDF = (cvData) => {
     };
   }
 
+  // Set a proper title to avoid browser print conflicts
+  printWindow.document.title = "CV - Professional Resume";
+
   // Use modern DOM methods to set content (avoiding document.write)
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlContent, "text/html");
@@ -37,7 +40,7 @@ export const downloadCVAsPDF = (cvData) => {
   return {
     success: true,
     message:
-      "CV download initiated! Use your browser's print dialog to save as PDF.",
+      "CV download initiated! In the print dialog, set margins to 'Minimum' and disable headers/footers in 'More settings' to avoid browser text on your CV.",
   };
 };
 
@@ -249,17 +252,74 @@ const generateCVHTML = (cvData) => {
         
         /* Print Optimizations */
         @media print {
+            @page {
+                margin: 0.5in;
+                size: A4;
+                /* Remove browser headers and footers */
+                @top-left { content: ""; }
+                @top-center { content: ""; }
+                @top-right { content: ""; }
+                @bottom-left { content: ""; }
+                @bottom-center { content: ""; }
+                @bottom-right { content: ""; }
+            }
+            
+            /* Additional browser-specific print header/footer removal */
+            @page {
+                margin-top: 0.5in;
+                margin-bottom: 0.5in;
+                margin-left: 0.5in;
+                margin-right: 0.5in;
+            }
+            
             body { 
                 margin: 0; 
-                padding: 0.5in; 
+                padding: 0; 
                 font-size: 10pt;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
+            
             .section { 
                 page-break-inside: avoid; 
                 margin-bottom: 12pt;
             }
+            
             .work-item, .project-item, .education-item {
                 page-break-inside: avoid;
+            }
+            
+            /* Ensure no browser print elements show */
+            @page :first {
+                margin-top: 0.5in;
+                @top-left { content: ""; }
+                @top-center { content: ""; }
+                @top-right { content: ""; }
+                @bottom-left { content: ""; }
+                @bottom-center { content: ""; }
+                @bottom-right { content: ""; }
+            }
+            
+            @page :left {
+                margin-left: 0.5in;
+                margin-right: 0.5in;
+                @top-left { content: ""; }
+                @top-center { content: ""; }
+                @top-right { content: ""; }
+                @bottom-left { content: ""; }
+                @bottom-center { content: ""; }
+                @bottom-right { content: ""; }
+            }
+            
+            @page :right {
+                margin-left: 0.5in;
+                margin-right: 0.5in;
+                @top-left { content: ""; }
+                @top-center { content: ""; }
+                @top-right { content: ""; }
+                @bottom-left { content: ""; }
+                @bottom-center { content: ""; }
+                @bottom-right { content: ""; }
             }
         }
         
